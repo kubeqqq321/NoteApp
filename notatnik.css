@@ -1,0 +1,332 @@
+:root{
+    --main-button-color: rgb(113, 113, 238);
+    --main-button-hover: rgb(75, 75, 194);
+
+}
+
+body{
+    font-family: 'Montserrat', monospace;
+    /* text-align: center; */
+    font-size: 1.2rem;
+}
+#container{
+background-color: beige;
+    width: 1200px;
+    margin: auto;
+    height: auto;
+}
+
+/* header oraz wszystkie przyciski i searchbar -------------------------------------------------------------------------*/
+
+#header{
+    display: flex;
+    height: auto;
+    justify-content: space-between;
+    background-color: rgb(35, 37, 70);
+
+}
+#left-side-header{
+    text-align: left;
+    display: flex;
+    align-items: center;
+
+}
+#right-side-header{
+    text-align: right;
+    display: flex;
+    margin: 10px 20px;
+}
+
+.title-header{
+    color: white;
+    font-size: 2rem;
+    margin: 10px;
+    font-weight: bold;
+}
+
+.btn-header , #open-add-dialog {
+    font-size: 1rem;
+    padding: 10px 15px;
+    /* border-radius: 10px; */
+    border: none;
+    background-color: transparent;
+    color: white;
+    border-bottom:0;
+    transition: all .3s  linear;
+}
+.btn-header:hover, #open-add-dialog:hover{
+    border-bottom: 1px solid white;
+    color: black;
+    transition: all ease-in-out .3s;
+    background: none repeat scroll 0 0 #ffffff;
+    content: ""; 
+}
+
+input#search-bar{
+    border-radius: 8px;
+    width: 250px;
+}
+
+
+/* część dla kontenera na notatki  -------------------------------------------------------------------------*/
+
+#note-container {
+    background-color: black;
+    width: auto;
+    height: auto;
+    margin: 10px 0px 10px 0px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: start;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-items: center;
+    justify-content: space-evenly;
+}
+.note{
+    width: 500px;
+    /* height: 250px; */
+    background-color: green;
+    margin: 10px;
+    border-radius: 12px;
+    color: white; /* Kolor tekstu wewnątrz obrysu */
+
+}
+.test1{
+    width: 500px;
+    height: 250px;
+    background-color: red;
+    margin: 10px;
+}
+.test2{
+    width: 500px;
+    height: 250px;
+    background-color: orange;
+    margin: 10px;
+}
+.test3{
+    width: 500px;
+    height: 250px;
+    background-color: blue;
+    margin: 10px;
+}
+
+
+
+/* dialog add new note -------------------------------------------------------------------------  */
+
+#add-new-note-dialog{
+    background-color: white;
+    width: 600px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.dialogHeader, .input-container, .category-container, .text-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0px 15px 0px;
+    /* padding: 10px; */
+    /* border-bottom: 1px solid black; */
+}
+
+.dialogHeader {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 20px;
+    margin: auto;
+}
+
+.dialogHeader .add-header{
+    font-size: 2rem;
+}
+#data-add-container {
+    padding: 20px;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+
+#add-close{
+    background: none;
+    color: gray;
+    border: none;
+    font-weight: bold;
+    /* font-size: 20px; */
+    box-shadow: none;
+    filter: none;
+    transition: all 0.3s ease-in;
+}
+#add-close:hover{
+    color: crimson;
+    transition: all 0.3s ease-out;
+}
+
+.input-container, .category-container, .text-container {
+    display: flex;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    overflow: hidden;
+    /* width: 300px; */
+    flex-direction: row;
+    align-items: stretch;
+    /* align-content: center; */
+}
+
+.text-container-center{
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+#input-field, #category-field , #text-field-input{
+    border: none;
+    padding: 8px;
+    flex-grow: 1;
+    font-size: 14px;
+    outline: none;
+    
+}
+
+.label-input, .text-label-input{
+    padding: 10px;
+    background-color: #f0f0f0;
+    color: #808080;
+    font-size: 16px;
+    /* border-right: 1px solid #d9d9d9; */
+
+}
+#input-field:focus {
+    outline: none;
+    border: none;
+  }
+
+.submit-btn-container {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    /* border-top: 1px solid black ; */
+    padding: 10px 0px 10px 10px;
+}
+
+.submit-btn-container .cancel{
+    padding: 10px;
+    color:#ffffff;
+    background-color: gray;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    margin: 5px;
+    transition: background-color 0.2s ease-in;
+}
+
+.submit-btn-container .cancel:hover{
+    background-color: rgb(97, 97, 97);
+    transition: background-color 0.2s ease-out;
+}
+.submit-btn-container .submit{
+    padding: 10px;
+    color:#ffffff;
+    background-color: var(--main-button-color);
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    margin: 5px;
+    transition: background-color 0.2s ease-in;
+}
+.submit-btn-container .submit:hover{
+    background-color: var(--main-button-hover);
+    transition: background-color 0.2s ease-out;
+}
+
+
+/* style dla notatek -------------------------------------------------------------------------*/
+
+.header-note {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    padding: 10px;
+    margin: 10px;
+    border-bottom: 1px solid black;
+    text-shadow:
+    2px 2px 0 black,   /* Prawy dolny cień */
+    -2px 2px 0 black,  /* Lewy dolny cień */
+    2px -2px 0 black,  /* Prawy górny cień */
+    -2px -2px 0 black, /* Lewy górny cień */
+    2px 0px 0 black,   /* Cień po prawej */
+    -2px 0px 0 black,  /* Cień po lewej */
+    0px 2px 0 black,   /* Cień na dole */
+    0px -2px 0 black;  /* Cień na górze */
+}
+.checknox-title-note {
+    display: inherit;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    
+}
+input#checkbox-note {
+    margin-right: 15px;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 2px solid #797979;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    padding: 5px
+}
+
+input#checkbox-note:checked{
+    background-color: rgb(247, 226, 39);
+    padding: 5px;
+}
+
+.title-note {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+span.material-symbols-outlined.edit, span.material-symbols-outlined.delete  {
+    cursor: pointer;
+}
+
+#content-note  {
+    width: auto;
+    height: 80px;
+    margin: 10px;
+    padding: 10px;
+    color: white;
+    border: 1px solid black;
+}
+
+/* #category-note{
+    width: auto;
+    height: 40px;
+    margin: 10px;
+    padding: 10px;
+    color: white;
+    border: 1px solid black;
+} */
+#category-date-container{
+    display: flex;
+}
+
+div#creation-date, #category-note {
+    border: 1px solid black;
+    height: 20px;
+    padding: 10px;
+    margin: 10px;
+}

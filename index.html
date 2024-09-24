@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="notatnik.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="container">
+        <div id="header">
+            <div id="left-side-header">
+                <div class="title-header">Note</div>
+                <button class="btn-header" onclick="ShowAll()">All</button>
+                <button class="btn-header" onclick="showHome()">Home</button>
+                <button class="btn-header" onclick="showWork()">Work</button>
+                <button class="btn-header" onclick="showPersonal()">Personal</button>
+                <button id="open-add-dialog">+ ADD NOTE</button>
+
+                <!-- otwierany dialog po kliknięciu +ADD NOTE -->
+                <dialog id="add-new-note-dialog">
+                    <div class="dialogHeader">
+                        <div class="add-header">Add</div>
+                        <button id="add-close" class="material-symbols-outlined" onclick="closeDialog()">close</button>
+                    </div>
+                    <div id="add-note-form">
+                        <div id="data-add-container">
+                            <div class="input-container">
+                                <span class="label-input">Add title...</span>
+                                <input type="text" id="input-field" value="" placeholder="e.g.Clean Home">
+                            </div>
+                            <div class="category-container">
+                                <span class="label-input">Select category</span>
+                                <select name="category-field" id="category-field">
+                                    <option class="category-field-option" value="Select">--Select--</option>
+                                    <option class="category-field-option" value="Home">Home</option>
+                                    <option class="category-field-option" value="Work">Work</option>
+                                    <option class="category-field-option" value="Personal">Personal</option>
+                                </select>
+                            </div>
+                            <div class="text-container">
+                                <div class="text-container-center">
+                                    <span class="text-label-input">Add description...</span>
+                                </div>
+
+                                <textarea id="text-field-input" rows="5" cols="33"
+                                    placeholder="e.g.It's time to clean my home"></textarea>
+                            </div>
+                        </div>
+                        <div class="submit-btn-container">
+                            <button id="submit-add-button" type="submit">Add</button>
+                            <button class="cancel" type="cancel" onclick="closeDialog();">Cancel</button>
+                        </div>
+                    </div>
+                </dialog>
+                <!-- otwierany dialog po kliknięciu +ADD NOTE -->
+
+
+            </div>
+            <div id="right-side-header">
+                <input type="text" placeholder="Search" id="search-bar">
+            </div>
+        </div>
+        <!-- W tym miejscu trzeba zrobic mapowanie z arrayu obiektow wszystkich notatek -->
+        <div id="note-container">
+            <!-- <div class="note">
+                <div class="header-note">
+                    <div class="checknox-title-note">
+                        <input id="checkbox-note" type="checkbox">
+                        <div id="title-note"></div>
+                    </div>
+                    <div class="update-delete-note">
+                        <span id="pencil-edit" class="material-symbols-outlined edit"
+                            onclick="updateData();">edit</span>
+                        <span id="bin-delete" class="material-symbols-outlined delete"
+                            onclick="deleteTask();">delete</span>
+                    </div>
+                </div>
+                <div id="content-note"></div>
+                <div id="category-date-container">
+                    <div id="creation-date"></div>
+                    <div id="category-note"></div>
+                </div>
+            </div>
+
+
+            <div class="test1"></div>
+            <div class="test2"></div>
+            <div class="test3"></div> -->
+        </div>
+    </div>
+
+
+    <script src="notatnik.js"></script>
+</body>
+
+</html>

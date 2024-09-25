@@ -10,11 +10,11 @@ const getCategory = document.getElementById('category-field');
 const getTextDescription = document.getElementById('text-field-input');
 
 const checkboxNote = document.getElementById('checkbox-note');
-// const binToDelete = document.getElementById('bin-delete');
+
+const categoryNote = document.getElementById('category-note');
 
 // przyciski
 const addNewNote = document.getElementById("submit-add-button");
-
 
 function selectCategory() {
     // const outputBox = document.getElementById('category-note');
@@ -30,13 +30,14 @@ function selectCategory() {
     }
     return output;
 }
+
 function createNewNote(note) {
     return `
     <div id="note-${note.id}" class="note" style="background-color: ${note.color} ;">
     <div class="header-note">
     <div class="checknox-title-note">
-        <input id="checkbox-note" type="checkbox" onclick="checkedDone(this)"; >
-        <div id="title-note">${note.title}</div>
+        <input id="checkbox-note"  ${note.isChecked ? 'checked' : ''} type="checkbox" onclick="checkedDone(this,${note.id})"; >
+        <div id="title-note" class="${note.isChecked ? 'strikethrough' : ''}" >${note.title}</div>
     </div>
     <div class="update-delete-note">
         <span id="pencil-edit" class="material-symbols-outlined edit"
@@ -45,14 +46,25 @@ function createNewNote(note) {
             onclick="deleteTask(${note.id});">delete</span>
     </div>
     </div>
-    <div id="content-note">${note.description}</div>
+    <div id="content-note" class="${note.isChecked ? 'strikethrough' : ''}" >${note.description}</div>
     <div id="category-date-container">
-        <div id="creation-date">${note.date}</div>
-        <div id="category-note">${note.category}</div>
+        <div id="creation-date" class="${note.isChecked ? 'strikethrough' : ''}" >${note.date}</div>
+        <div id="category-note" class="${note.isChecked ? 'strikethrough' : ''}" >${note.category}</div>
     </div>
     </div>`;
 }
 
+function displayNotes() {
+    let notes = getNotesFromLocalStorage();
+    document.getElementById('note-container').innerHTML = notes.map(note => createNewNote(note)).join('');
+}
+
+window.onload = function () {
+    displayNotes();
+}
+
+
+// to jest z neta
 function getRandomColor() {
     var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
     if (randomColor.length != 7) {
@@ -63,7 +75,7 @@ function getRandomColor() {
 
 function generateNote() {
 
-    let notesArray = [];
+    // let notesArray = [];
     let categoryNote = selectCategory();
     let titleNote = getTitle.value;
     let contentNote = getTextDescription.value;
@@ -82,15 +94,25 @@ function generateNote() {
         date: creationNote,
         color: newColor
     };
+    let getNotes = getNotesFromLocalStorage();
 
-    notesArray.push(noteDetail);
-
-    let newNote = createNewNote(noteDetail);
-
-    let noteContainer = document.getElementById("note-container");
-    noteContainer.insertAdjacentHTML("beforeend", newNote);
+    getNotes.push(noteDetail);
+    dataSaveToLocalStorage(getNotes);
+    displayNotes();
 
     resetValues();
+
+    // notesArray.push(noteDetail);
+    // let newNote = createNewNote(noteDetail);
+
+    // let noteContainer = document.getElementById("note-container");
+    // dataSaveToLocalStorage(noteDetail);
+
+    // noteContainer.insertAdjacentHTML("beforeend", newNote);
+
+    // console.log(dataSaveToLocalStorage(notes));
+    // resetValues();
+    // displayNotes();
 }
 
 function resetValues() {
@@ -105,26 +127,6 @@ addNewNote.addEventListener("click", () => {
     dialogAddNote.close();
 }, false);
 
-// ----------------------
-// const checkboxNote = document.getElementById('checkbox-note');
-// const divElements = document.getElementsByTagName('div');
-
-// function changeColor(event) {
-//     event.dialogAddNote.showModal();
-// }
-
-// checkboxNote.addEventListener("click", (event) => {
-//     event.target.style.backgroundColor = "red";
-//     binToDelete.style.backgroundColor = "tomato";
-
-// });
-// binToDelete.addEventListener("mouseover", (event) => {
-//     event.target.textContent = "Bin";
-// })
-// binToDelete.addEventListener("mouseout", (event) => {
-//     event.target.textContent = "delete";
-// })
-
 openAddNote.onclick = function () {
     dialogAddNote.showModal();
 }
@@ -133,28 +135,58 @@ function closeDialog() {
     dialogAddNote.close();
 }
 
+function checkedDone(checkbox, noteId) {
 
-function checkedDone(checkbox) {
-    let titleNote = document.getElementById("title-note");
-    // Uncheck
-    checkboxNote.checked = true;
+    const note = document.getElementById('note-' + noteId)
 
-    if (checkboxNote.checked == true) {
-        titleNote.style.textDecoration("line-through");
+    let notes = getNotesFromLocalStorage();
+
+    const title = note.querySelector('#title-note');
+    const category = note.querySelector('#category-note');
+    const description = note.querySelector('#content-note');
+    const date = note.querySelector('#creation-date');
+
+    let findId = notes.find(n => n.id === noteId);
+
+    if (checkbox.checked) {
+        title.classList.add('strikethrough');
+        category.classList.add('strikethrough');
+        description.classList.add('strikethrough');
+        date.classList.add('strikethrough');
+        // checkboxNote.checked = true;
+        findId.isChecked = true;
+    }
+    else {
+        title.classList.remove('strikethrough');
+        category.classList.remove('strikethrough');
+        description.classList.remove('strikethrough');
+        date.classList.remove('strikethrough');
+        // checkboxNote.checked = false;
+        findId.isChecked = false;
     }
 
-    // // Check
-    // checkboxNote.checked = true;
-
-
+    console.log(note.id);
+    dataSaveToLocalStorage(notes);
 }
 
-// okno dialogowe add new note -------------------------------------------------------------------------*/
+// zapisywanie informacji do localStorage
+function dataSaveToLocalStorage(note) {
+    localStorage.setItem("notes", JSON.stringify(note));
+}
+
+// pobieranie informacji z localStorage
+function getNotesFromLocalStorage() {
+    const notes = localStorage.getItem('notes');
+    return notes ? JSON.parse(notes) : [];
+}
 
 
-// przycisk headera pokazujący elementy Al
+// przycisk headera pokazujący elementy All
 function ShowAll() {
-
+    let options = getCategory.selectedOptions;
+    // if (options[1].value === 'Home') {
+    //     console.log(options.value)
+    // }
 }
 
 // przycisk headera pokazujący elementy Home
@@ -182,11 +214,26 @@ function updateData(noteId) {
 
 
 //przycisk kosza do usuwania taska
+
+// zrobić usuwanie elementów nie po kluczu a po wartości 
 function deleteTask(noteId) {
     console.log('Usuwanie notatki o id:', noteId);
+
+    let notes = getNotesFromLocalStorage();
+
+    notes = notes.filter(note => note.id !== noteId)
+
+
+    localStorage.removeItem(noteId);
+    // let i = localStorage.length;
+    // for (let i = localStorage.length; i >= 0; i--) {
+    //     let key = localStorage.key(i);
+    //     if (localStorage.getItem(key) === noteId) {
+    //         localStorage.removeItem(key);
+    //     } else
+    //         console.log("cos jest zle")
+    // }
 }
-
-
 
 //stare funkcje raczej do usunięcia jednak narazie sie wstrzymuje
 

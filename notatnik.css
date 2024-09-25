@@ -308,7 +308,7 @@ span.material-symbols-outlined.edit, span.material-symbols-outlined.delete  {
 
 #content-note  {
     width: auto;
-    height: 80px;
+    height: auto;
     margin: 10px;
     padding: 10px;
     color: white;

@@ -8,8 +8,8 @@ var openAddNote = document.getElementById('open-add-dialog');
 var getTitle = document.getElementById('input-field');
 var getCategory = document.getElementById('category-field');
 var getTextDescription = document.getElementById('text-field-input');
-var checkboxNote = document.getElementById('checkbox-note'); // const binToDelete = document.getElementById('bin-delete');
-// przyciski
+var checkboxNote = document.getElementById('checkbox-note');
+var categoryNote = document.getElementById('category-note'); // przyciski
 
 var addNewNote = document.getElementById("submit-add-button");
 
@@ -31,8 +31,20 @@ function selectCategory() {
 }
 
 function createNewNote(note) {
-  return "\n    <div id=\"note-".concat(note.id, "\" class=\"note\" style=\"background-color: ").concat(note.color, " ;\">\n    <div class=\"header-note\">\n    <div class=\"checknox-title-note\">\n        <input id=\"checkbox-note\" type=\"checkbox\" onclick=\"checkedDone(this)\"; >\n        <div id=\"title-note\">").concat(note.title, "</div>\n    </div>\n    <div class=\"update-delete-note\">\n        <span id=\"pencil-edit\" class=\"material-symbols-outlined edit\"\n            onclick=\"updateData(").concat(note.id, ");\">edit</span>\n        <span id=\"bin-delete\" class=\"material-symbols-outlined delete\"\n            onclick=\"deleteTask(").concat(note.id, ");\">delete</span>\n    </div>\n    </div>\n    <div id=\"content-note\">").concat(note.description, "</div>\n    <div id=\"category-date-container\">\n        <div id=\"creation-date\">").concat(note.date, "</div>\n        <div id=\"category-note\">").concat(note.category, "</div>\n    </div>\n    </div>");
+  return "\n    <div id=\"note-".concat(note.id, "\" class=\"note\" style=\"background-color: ").concat(note.color, " ;\">\n    <div class=\"header-note\">\n    <div class=\"checknox-title-note\">\n        <input id=\"checkbox-note\"  ").concat(note.isChecked ? 'checked' : '', " type=\"checkbox\" onclick=\"checkedDone(this,").concat(note.id, ")\"; >\n        <div id=\"title-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.title, "</div>\n    </div>\n    <div class=\"update-delete-note\">\n        <span id=\"pencil-edit\" class=\"material-symbols-outlined edit\"\n            onclick=\"updateData(").concat(note.id, ");\">edit</span>\n        <span id=\"bin-delete\" class=\"material-symbols-outlined delete\"\n            onclick=\"deleteTask(").concat(note.id, ");\">delete</span>\n    </div>\n    </div>\n    <div id=\"content-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.description, "</div>\n    <div id=\"category-date-container\">\n        <div id=\"creation-date\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.date, "</div>\n        <div id=\"category-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.category, "</div>\n    </div>\n    </div>");
 }
+
+function displayNotes() {
+  var notes = getNotesFromLocalStorage();
+  document.getElementById('note-container').innerHTML = notes.map(function (note) {
+    return createNewNote(note);
+  }).join('');
+}
+
+window.onload = function () {
+  displayNotes();
+}; // to jest z neta
+
 
 function getRandomColor() {
   var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
@@ -45,7 +57,7 @@ function getRandomColor() {
 }
 
 function generateNote() {
-  var notesArray = [];
+  // let notesArray = [];
   var categoryNote = selectCategory();
   var titleNote = getTitle.value;
   var contentNote = getTextDescription.value;
@@ -63,11 +75,18 @@ function generateNote() {
     date: creationNote,
     color: newColor
   };
-  notesArray.push(noteDetail);
-  var newNote = createNewNote(noteDetail);
-  var noteContainer = document.getElementById("note-container");
-  noteContainer.insertAdjacentHTML("beforeend", newNote);
-  resetValues();
+  var getNotes = getNotesFromLocalStorage();
+  getNotes.push(noteDetail);
+  dataSaveToLocalStorage(getNotes);
+  displayNotes();
+  resetValues(); // notesArray.push(noteDetail);
+  // let newNote = createNewNote(noteDetail);
+  // let noteContainer = document.getElementById("note-container");
+  // dataSaveToLocalStorage(noteDetail);
+  // noteContainer.insertAdjacentHTML("beforeend", newNote);
+  // console.log(dataSaveToLocalStorage(notes));
+  // resetValues();
+  // displayNotes();
 }
 
 function resetValues() {
@@ -80,22 +99,7 @@ function resetValues() {
 addNewNote.addEventListener("click", function () {
   generateNote();
   dialogAddNote.close();
-}, false); // ----------------------
-// const checkboxNote = document.getElementById('checkbox-note');
-// const divElements = document.getElementsByTagName('div');
-// function changeColor(event) {
-//     event.dialogAddNote.showModal();
-// }
-// checkboxNote.addEventListener("click", (event) => {
-//     event.target.style.backgroundColor = "red";
-//     binToDelete.style.backgroundColor = "tomato";
-// });
-// binToDelete.addEventListener("mouseover", (event) => {
-//     event.target.textContent = "Bin";
-// })
-// binToDelete.addEventListener("mouseout", (event) => {
-//     event.target.textContent = "delete";
-// })
+}, false);
 
 openAddNote.onclick = function () {
   dialogAddNote.showModal();
@@ -105,21 +109,54 @@ function closeDialog() {
   dialogAddNote.close();
 }
 
-function checkedDone(checkbox) {
-  var titleNote = document.getElementById("title-note"); // Uncheck
+function checkedDone(checkbox, noteId) {
+  var note = document.getElementById('note-' + noteId);
+  var notes = getNotesFromLocalStorage();
+  var title = note.querySelector('#title-note');
+  var category = note.querySelector('#category-note');
+  var description = note.querySelector('#content-note');
+  var date = note.querySelector('#creation-date');
+  var findId = notes.find(function (n) {
+    return n.id === noteId;
+  });
 
-  checkboxNote.checked = true;
+  if (checkbox.checked) {
+    title.classList.add('strikethrough');
+    category.classList.add('strikethrough');
+    description.classList.add('strikethrough');
+    date.classList.add('strikethrough'); // checkboxNote.checked = true;
 
-  if (checkboxNote.checked == true) {
-    titleNote.style.textDecoration("line-through");
-  } // // Check
-  // checkboxNote.checked = true;
+    findId.isChecked = true;
+  } else {
+    title.classList.remove('strikethrough');
+    category.classList.remove('strikethrough');
+    description.classList.remove('strikethrough');
+    date.classList.remove('strikethrough'); // checkboxNote.checked = false;
 
-} // okno dialogowe add new note -------------------------------------------------------------------------*/
-// przycisk headera pokazujący elementy Al
+    findId.isChecked = false;
+  }
+
+  console.log(note.id);
+  dataSaveToLocalStorage(notes);
+} // zapisywanie informacji do localStorage
 
 
-function ShowAll() {} // przycisk headera pokazujący elementy Home
+function dataSaveToLocalStorage(note) {
+  localStorage.setItem("notes", JSON.stringify(note));
+} // pobieranie informacji z localStorage
+
+
+function getNotesFromLocalStorage() {
+  var notes = localStorage.getItem('notes');
+  return notes ? JSON.parse(notes) : [];
+} // przycisk headera pokazujący elementy All
+
+
+function ShowAll() {
+  var options = getCategory.selectedOptions; // if (options[1].value === 'Home') {
+  //     console.log(options.value)
+  // }
+} // przycisk headera pokazujący elementy Home
 
 
 function showHome() {} // przycisk headera pokazujący elementy Work
@@ -135,10 +172,23 @@ function showPersonal() {} //generowanie karty to do a stronie głównej
 function updateData(noteId) {
   console.log('Aktualizacja notatki o id:', noteId);
 } //przycisk kosza do usuwania taska
+// zrobić usuwanie elementów nie po kluczu a po wartości 
 
 
 function deleteTask(noteId) {
   console.log('Usuwanie notatki o id:', noteId);
+  var notes = getNotesFromLocalStorage();
+  notes = notes.filter(function (note) {
+    return note.id !== noteId;
+  });
+  localStorage.removeItem(noteId); // let i = localStorage.length;
+  // for (let i = localStorage.length; i >= 0; i--) {
+  //     let key = localStorage.key(i);
+  //     if (localStorage.getItem(key) === noteId) {
+  //         localStorage.removeItem(key);
+  //     } else
+  //         console.log("cos jest zle")
+  // }
 } //stare funkcje raczej do usunięcia jednak narazie sie wstrzymuje
 // function selectTitle() {
 //     const outputBox = document.getElementById('title-note');

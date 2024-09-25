@@ -47,7 +47,7 @@ background-color: beige;
 .btn-header , #open-add-dialog {
     font-size: 1rem;
     padding: 10px 15px;
-    /* border-radius: 10px; */
+    border-radius: 10px;
     border: none;
     background-color: transparent;
     color: white;
@@ -75,18 +75,19 @@ input#search-bar{
     width: auto;
     height: auto;
     margin: 10px 0px 10px 0px;
-    display: inline-flex;
+    display: flex;
     flex-direction: row;
     align-items: start;
     flex-wrap: wrap;
-    align-content: space-between;
+    align-content: center;
     justify-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    padding: 0px 60px 0px 60px;
 }
 .note{
     width: 500px;
     /* height: 250px; */
-    background-color: green;
+    /* background-color: green; */
     margin: 10px;
     border-radius: 12px;
     color: white; /* Kolor tekstu wewnątrz obrysu */
@@ -227,7 +228,7 @@ input#search-bar{
     background-color: rgb(97, 97, 97);
     transition: background-color 0.2s ease-out;
 }
-.submit-btn-container .submit{
+.submit-btn-container #submit-add-button{
     padding: 10px;
     color:#ffffff;
     background-color: var(--main-button-color);
@@ -237,7 +238,7 @@ input#search-bar{
     margin: 5px;
     transition: background-color 0.2s ease-in;
 }
-.submit-btn-container .submit:hover{
+.submit-btn-container #submit-add-button:hover{
     background-color: var(--main-button-hover);
     transition: background-color 0.2s ease-out;
 }
@@ -255,15 +256,7 @@ input#search-bar{
     padding: 10px;
     margin: 10px;
     border-bottom: 1px solid black;
-    text-shadow:
-    2px 2px 0 black,   /* Prawy dolny cień */
-    -2px 2px 0 black,  /* Lewy dolny cień */
-    2px -2px 0 black,  /* Prawy górny cień */
-    -2px -2px 0 black, /* Lewy górny cień */
-    2px 0px 0 black,   /* Cień po prawej */
-    -2px 0px 0 black,  /* Cień po lewej */
-    0px 2px 0 black,   /* Cień na dole */
-    0px -2px 0 black;  /* Cień na górze */
+
 }
 .checknox-title-note {
     display: inherit;
@@ -290,13 +283,23 @@ input#checkbox-note {
 }
 
 input#checkbox-note:checked{
-    background-color: rgb(247, 226, 39);
+    background-color: black;
     padding: 5px;
 }
 
-.title-note {
+
+#title-note {
     font-size: 24px;
     font-weight: bold;
+    text-shadow:
+    2px 2px 0 black,   /* Prawy dolny cień */
+    -2px 2px 0 black,  /* Lewy dolny cień */
+    2px -2px 0 black,  /* Prawy górny cień */
+    -2px -2px 0 black, /* Lewy górny cień */
+    2px 0px 0 black,   /* Cień po prawej */
+    -2px 0px 0 black,  /* Cień po lewej */
+    0px 2px 0 black,   /* Cień na dole */
+    0px -2px 0 black;  /* Cień na górze */
 }
 
 span.material-symbols-outlined.edit, span.material-symbols-outlined.delete  {
@@ -329,4 +332,8 @@ div#creation-date, #category-note {
     height: 20px;
     padding: 10px;
     margin: 10px;
+}
+
+.strikethrough {
+    text-decoration: line-through;
 }

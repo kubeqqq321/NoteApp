@@ -7,25 +7,17 @@ const openAddNote = document.getElementById('open-add-dialog');
 
 const getTitle = document.getElementById('input-field');
 const getCategory = document.getElementById('category-field');
-// const getCategory = document.getElementById('personlist').value = Person_ID;
-// const getCategory = document.getElementsByTagName('option');
-// const getCategoryElement = getCategory.children;
-// console.log(getCategoryElement[2])
-
 const getTextDescription = document.getElementById('text-field-input');
 
-
-
-// const pencilToUpdate = document.getElementById('pencil-edit');
+const checkboxNote = document.getElementById('checkbox-note');
 // const binToDelete = document.getElementById('bin-delete');
 
 // przyciski
-
 const addNewNote = document.getElementById("submit-add-button");
 
 
 function selectCategory() {
-    const outputBox = document.getElementById('category-note');
+    // const outputBox = document.getElementById('category-note');
     let options = getCategory.selectedOptions;
     let output = '';
 
@@ -34,133 +26,94 @@ function selectCategory() {
             break;
         }
         output += options[i].value;
+        console.log(output);
     }
-    outputBox.style.fontWeight = 'bold';
-    outputBox.textContent = output;
+    return output;
+}
+function createNewNote(note) {
+    return `
+    <div id="note-${note.id}" class="note" style="background-color: ${note.color} ;">
+    <div class="header-note">
+    <div class="checknox-title-note">
+        <input id="checkbox-note" type="checkbox" onclick="checkedDone(this)"; >
+        <div id="title-note">${note.title}</div>
+    </div>
+    <div class="update-delete-note">
+        <span id="pencil-edit" class="material-symbols-outlined edit"
+            onclick="updateData(${note.id});">edit</span>
+        <span id="bin-delete" class="material-symbols-outlined delete"
+            onclick="deleteTask(${note.id});">delete</span>
+    </div>
+    </div>
+    <div id="content-note">${note.description}</div>
+    <div id="category-date-container">
+        <div id="creation-date">${note.date}</div>
+        <div id="category-note">${note.category}</div>
+    </div>
+    </div>`;
 }
 
-function selectTitle() {
-    const outputBox = document.getElementById('title-note');
-    let title = getTitle.value;
-
-    if (title === "") {
-        alert("Please write title for task");
-        return;
-    } else {
-        outputBox.innerHTML = title;
+function getRandomColor() {
+    var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    if (randomColor.length != 7) {
+        randomColor = generateRandomColor();
     }
+    return randomColor;
 }
 
-function selectDescription() {
-    const outputBox = document.getElementById('content-note');
-    let description = getTextDescription.value;
+function generateNote() {
 
-    if (description === "") {
-        alert("Please write description");
-        return;
-    } else {
-        outputBox.innerHTML = description;
-    }
+    let notesArray = [];
+    let categoryNote = selectCategory();
+    let titleNote = getTitle.value;
+    let contentNote = getTextDescription.value;
+    let newColor = getRandomColor();
+    let date = new Date();
+    let creationNote = date.toLocaleDateString();
+
+    // dane dla notatki
+    let noteDetail =
+    {
+        id: Date.now(),
+        title: titleNote,
+        category: categoryNote,
+        description: contentNote,
+        isChecked: false, //to jest do przemyślenia czy jest to do czegoś potrzebne
+        date: creationNote,
+        color: newColor
+    };
+
+    notesArray.push(noteDetail);
+
+    let newNote = createNewNote(noteDetail);
+
+    let noteContainer = document.getElementById("note-container");
+    noteContainer.insertAdjacentHTML("beforeend", newNote);
+
+    resetValues();
 }
 
-function selectActualDate() {
-    const outputBox = document.getElementById('creation-date');
-    const date = new Date();
-    const todayDate = date.toLocaleDateString();
-
-    // let day = date.getDay();
-    // let month = date.getMonth() + 1;
-    // let year = date.getFullYear();
-
-    // let fullDate = `${day} - ${month} - ${year}`;
-
-    outputBox.innerHTML = todayDate;
-}
-
-// function generateNote() {
-//     let i = 0;
-//     const table = document.getElementById("note-container");
-//     let noteDiv = document.createElement("div");
-//     noteDiv.id = "note" + i++;
-//     let note = `
-//     <div class="header-note">
-//     <div class="checknox-title-note">
-//         <input id="checkbox-note" type="checkbox">
-//         <div id="title-note"></div>
-//     </div>
-//     <div class="update-delete-note">
-//         <span id="pencil-edit" class="material-symbols-outlined edit"
-//             onclick="updateData();">edit</span>
-//         <span id="bin-delete" class="material-symbols-outlined delete"
-//             onclick="deleteTask();">delete</span>
-//     </div>
-// </div>
-// <div id="content-note"></div>
-// <div id="category-date-container">
-//     <div id="creation-date"></div>
-//     <div id="category-note"></div>
-// </div>
-// `
-
-//     let newElem = document.getElementById("note-container").appendChild(noteDiv);
-//     // const newRow = table.appendChild(note);
-//     // const cell = newRow.insertCell(0);
-//     // table.innerHTML = newElem;
-// }
-
-function generateNote(test = "test") {
-    let note = `<div class="note">
-                <div class="header-note">
-                <div class="checknox-title-note">
-                    <input id="checkbox-note" type="checkbox">
-                    <div id="title-note">${test}</div>
-                </div>
-                <div class="update-delete-note">
-                    <span id="pencil-edit" class="material-symbols-outlined edit"
-                        onclick="updateData();">edit</span>
-                    <span id="bin-delete" class="material-symbols-outlined delete"
-                        onclick="deleteTask();">delete</span>
-                </div>
-            </div>
-            <div id="content-note">test</div>
-            <div id="category-date-container">
-                <div id="creation-date"></div>
-                <div id="category-note"></div>
-            </div>
-        </div>`
-
-    document.getElementById("note-container").innerHTML = note;
+function resetValues() {
+    getTitle.value = "";
+    getTextDescription.value = "";
+    //nie wiem jak wyzerowac cały getCategory
+    getCategory[0];
 }
 
 addNewNote.addEventListener("click", () => {
     generateNote();
-    // selectTitle();
-    selectCategory();
-    selectDescription();
-    selectActualDate()
     dialogAddNote.close();
-
 }, false);
 
 // ----------------------
-// const noteContainer = document.getElementById('note-container');
+// const checkboxNote = document.getElementById('checkbox-note');
 // const divElements = document.getElementsByTagName('div');
-
-// toDoList = {
-//     "title": getTitle,
-//     "category": category,
-//     "description": description,
-//     "date": data,
-//     "isComplete": Complete,
-// }
-// console.log(getCategory[0])
-// console.log(divElements);
-// ----------------------
 
 // function changeColor(event) {
 //     event.dialogAddNote.showModal();
 // }
-// pencilToUpdate.addEventListener("click", (event) => {
+
+// checkboxNote.addEventListener("click", (event) => {
 //     event.target.style.backgroundColor = "red";
 //     binToDelete.style.backgroundColor = "tomato";
 
@@ -181,29 +134,19 @@ function closeDialog() {
 }
 
 
+function checkedDone(checkbox) {
+    let titleNote = document.getElementById("title-note");
+    // Uncheck
+    checkboxNote.checked = true;
 
-function handleSubmit() {
-    // let array = [];
-    // let title = getTitle.value;
-    // // const category = getCategory;
-    // let getCategoryElement = getCategory.children.value;
-    // let description = getTextDescription.value;
-    // if (!title) {
-    //     alert("Please write title for task");
-    //     return;
-    // }
-    // console.log(title);
-    // console.log(description);
-    // console.log(getCategoryElement[2])
-    // console.log(array[title, description])
-    // console.log(getTitle);
-    // alert('Thank you for subscribing!');
-    // closeDialog();
-}
+    if (checkboxNote.checked == true) {
+        titleNote.style.textDecoration("line-through");
+    }
+
+    // // Check
+    // checkboxNote.checked = true;
 
 
-function getDataFromModalAdd(title, category, description) {
-    console.log()
 }
 
 // okno dialogowe add new note -------------------------------------------------------------------------*/
@@ -230,20 +173,57 @@ function showPersonal() {
 
 }
 
-
-function makeToDoCard() {
-
-}
-
 //generowanie karty to do a stronie głównej
 
 // przycisk ołówka do edycji danych
-function updateData() {
-
+function updateData(noteId) {
+    console.log('Aktualizacja notatki o id:', noteId);
 }
 
 
 //przycisk kosza do usuwania taska
-function deleteTask() {
-
+function deleteTask(noteId) {
+    console.log('Usuwanie notatki o id:', noteId);
 }
+
+
+
+//stare funkcje raczej do usunięcia jednak narazie sie wstrzymuje
+
+// function selectTitle() {
+//     const outputBox = document.getElementById('title-note');
+//     let title = getTitle.value;
+
+//     if (title === "") {
+//         alert("Please write title for task");
+//         return;
+//     } else {
+//         outputBox.innerHTML = title;
+//     }
+// }
+
+// function selectDescription() {
+//     const outputBox = document.getElementById('content-note');
+//     let description = getTextDescription.value;
+
+//     if (description === "") {
+//         alert("Please write description");
+//         return;
+//     } else {
+//         outputBox.innerHTML = description;
+//     }
+// }
+
+// function selectActualDate() {
+//     const outputBox = document.getElementById('creation-date');
+//     const date = new Date();
+//     const todayDate = date.toLocaleDateString();
+
+//     // let day = date.getDay();
+//     // let month = date.getMonth() + 1;
+//     // let year = date.getFullYear();
+
+//     // let fullDate = `${day} - ${month} - ${year}`;
+
+//     outputBox.innerHTML = todayDate;
+// }

@@ -10,7 +10,7 @@ body{
     font-size: 1.2rem;
 }
 #container{
-background-color: beige;
+/* background-color: beige; */
     width: 1200px;
     margin: auto;
     height: auto;
@@ -71,7 +71,7 @@ input#search-bar{
 /* część dla kontenera na notatki  -------------------------------------------------------------------------*/
 
 #note-container {
-    background-color: black;
+    /* background-color: black; */
     width: auto;
     height: auto;
     margin: 10px 0px 10px 0px;
@@ -93,30 +93,10 @@ input#search-bar{
     color: white; /* Kolor tekstu wewnątrz obrysu */
 
 }
-.test1{
-    width: 500px;
-    height: 250px;
-    background-color: red;
-    margin: 10px;
-}
-.test2{
-    width: 500px;
-    height: 250px;
-    background-color: orange;
-    margin: 10px;
-}
-.test3{
-    width: 500px;
-    height: 250px;
-    background-color: blue;
-    margin: 10px;
-}
-
-
 
 /* dialog add new note -------------------------------------------------------------------------  */
 
-#add-new-note-dialog{
+#add-new-note-dialog , #update-note-dialog{
     background-color: white;
     width: 600px;
     border: 1px solid #000;
@@ -140,16 +120,16 @@ input#search-bar{
     margin: auto;
 }
 
-.dialogHeader .add-header{
+.dialogHeader .add-header, .update-header{
     font-size: 2rem;
 }
-#data-add-container {
+#data-add-container,  #data-update-container{
     padding: 20px;
     border-bottom: 1px solid black;
     border-top: 1px solid black;
 }
 
-#add-close{
+#add-close, #update-close{
     background: none;
     color: gray;
     border: none;
@@ -159,7 +139,7 @@ input#search-bar{
     filter: none;
     transition: all 0.3s ease-in;
 }
-#add-close:hover{
+#add-close:hover, #update-close:hover{
     color: crimson;
     transition: all 0.3s ease-out;
 }
@@ -181,7 +161,9 @@ input#search-bar{
     background-color: #f0f0f0;
 }
 
-#input-field, #category-field , #text-field-input{
+#input-field,#input-field-update,
+#category-field , #category-field-update, 
+#text-field-input , #text-field-input-update{
     border: none;
     padding: 8px;
     flex-grow: 1;
@@ -198,7 +180,7 @@ input#search-bar{
     /* border-right: 1px solid #d9d9d9; */
 
 }
-#input-field:focus {
+#input-field:focus, #input-field-update:focus {
     outline: none;
     border: none;
   }
@@ -228,7 +210,7 @@ input#search-bar{
     background-color: rgb(97, 97, 97);
     transition: background-color 0.2s ease-out;
 }
-.submit-btn-container #submit-add-button{
+#submit-add-button, #submit-update-button {
     padding: 10px;
     color:#ffffff;
     background-color: var(--main-button-color);
@@ -312,7 +294,7 @@ span.material-symbols-outlined.edit, span.material-symbols-outlined.delete  {
     margin: 10px;
     padding: 10px;
     color: white;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
 /* #category-note{
@@ -323,17 +305,63 @@ span.material-symbols-outlined.edit, span.material-symbols-outlined.delete  {
     color: white;
     border: 1px solid black;
 } */
-#category-date-container{
+#category-date-container {
     display: flex;
+    border-top: 1px solid black;
+    justify-content: space-between;
+    margin: 10px;
 }
 
 div#creation-date, #category-note {
-    border: 1px solid black;
+    /* border: 1px solid black; */
     height: 20px;
     padding: 10px;
     margin: 10px;
+    font-family: fantasy;
 }
 
 .strikethrough {
     text-decoration: line-through;
 }
+
+#pencil-edit , #bin-delete {
+    background: none;
+    border: none;
+    color: black;
+    transition: all 0.2s ease-in;
+}
+
+#bin-delete:hover{
+    color:crimson;
+    transition: all 0.2s ease-in;
+}
+
+#pencil-edit:hover{
+    background: none;
+    border: none;
+    color: rgb(3, 177, 3);
+    transition: all 0.2s ease-in;
+}
+
+
+.update-delete-note {
+    background: white;
+    /* border-radius: 50px; */
+    padding: 5px;
+    transform:
+      perspective(750px)
+      translate3d(0px, 0px, -250px)
+      rotateX(27deg)
+      scale(0.9, 0.9);
+    border-radius: 20px;
+    border: 5px solid #e6e6e6;
+    box-shadow: 0 70px 40px -20px rgba(0, 0, 0, 0.2);
+    transition: 0.4s ease-in-out transform;
+
+  }
+  .update-delete-note:hover{
+    transform: translate3d(0px, 0px, -250px);
+  }
+
+
+  

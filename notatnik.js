@@ -2,6 +2,7 @@
 // https://stackoverflow.com/questions/11563638/how-do-i-get-the-value-of-text-input-field-using-javascript
 // okno dialogowe add new note -------------------------------------------------------------------------*/
 const dialogAddNote = document.getElementById('add-new-note-dialog');
+
 const closeAddNote = document.getElementById('add-close');
 const openAddNote = document.getElementById('open-add-dialog');
 
@@ -15,6 +16,11 @@ const categoryNote = document.getElementById('category-note');
 
 // przyciski
 const addNewNote = document.getElementById("submit-add-button");
+
+//update dialog
+const dialogUpdateNote = document.getElementById('update-note-dialog');
+const closeUpdateNote = document.getElementById('update-close');
+const pencilUpdate = document.getElementById("pencil-edit");
 
 function selectCategory() {
     // const outputBox = document.getElementById('category-note');
@@ -40,10 +46,10 @@ function createNewNote(note) {
         <div id="title-note" class="${note.isChecked ? 'strikethrough' : ''}" >${note.title}</div>
     </div>
     <div class="update-delete-note">
-        <span id="pencil-edit" class="material-symbols-outlined edit"
-            onclick="updateData(${note.id});">edit</span>
-        <span id="bin-delete" class="material-symbols-outlined delete"
-            onclick="deleteTask(${note.id});">delete</span>
+        <button id="pencil-edit" class="material-symbols-outlined edit"
+            onclick="updateData(${note.id});">edit</button>
+        <button id="bin-delete" class="material-symbols-outlined delete"
+            onclick="deleteTask(${note.id});">delete</button>
     </div>
     </div>
     <div id="content-note" class="${note.isChecked ? 'strikethrough' : ''}" >${note.description}</div>
@@ -63,12 +69,11 @@ window.onload = function () {
     displayNotes();
 }
 
-
 // to jest z neta
 function getRandomColor() {
     var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
     if (randomColor.length != 7) {
-        randomColor = generateRandomColor();
+        randomColor = getRandomColor();
     }
     return randomColor;
 }
@@ -90,7 +95,7 @@ function generateNote() {
         title: titleNote,
         category: categoryNote,
         description: contentNote,
-        isChecked: false, //to jest do przemyślenia czy jest to do czegoś potrzebne
+        isChecked: false,
         date: creationNote,
         color: newColor
     };
@@ -119,7 +124,8 @@ function resetValues() {
     getTitle.value = "";
     getTextDescription.value = "";
     //nie wiem jak wyzerowac cały getCategory
-    getCategory[0];
+    // selectedIndex
+    getCategory.value;
 }
 
 addNewNote.addEventListener("click", () => {
@@ -153,7 +159,6 @@ function checkedDone(checkbox, noteId) {
         category.classList.add('strikethrough');
         description.classList.add('strikethrough');
         date.classList.add('strikethrough');
-        // checkboxNote.checked = true;
         findId.isChecked = true;
     }
     else {
@@ -161,13 +166,39 @@ function checkedDone(checkbox, noteId) {
         category.classList.remove('strikethrough');
         description.classList.remove('strikethrough');
         date.classList.remove('strikethrough');
-        // checkboxNote.checked = false;
         findId.isChecked = false;
     }
 
     console.log(note.id);
     dataSaveToLocalStorage(notes);
 }
+
+// przycisk ołówka do edycji danych
+function updateData(noteId) {
+    let notes = getNotesFromLocalStorage();
+    const noteToEdit = notes.find(note => note.id === noteId);
+
+    document.getElementById("input-field-update").value = noteToEdit.title;
+    document.getElementById("category-field-update").value = noteToEdit.category;
+    document.getElementById("text-field-input-update").value = noteToEdit.description;
+
+    dialogUpdateNote.showModal();
+}
+
+function closeDialogUpdate() {
+    dialogUpdateNote.close();
+}
+
+//działa
+//przycisk kosza do usuwania taska 
+function deleteTask(noteId) {
+    console.log('Usuwanie notatki o id:', noteId);
+    let notes = getNotesFromLocalStorage();
+    notes = notes.filter(note => note.id !== noteId)
+    dataSaveToLocalStorage(notes);
+    displayNotes();
+}
+
 
 // zapisywanie informacji do localStorage
 function dataSaveToLocalStorage(note) {
@@ -183,15 +214,15 @@ function getNotesFromLocalStorage() {
 
 // przycisk headera pokazujący elementy All
 function ShowAll() {
-    let options = getCategory.selectedOptions;
-    // if (options[1].value === 'Home') {
-    //     console.log(options.value)
-    // }
+
 }
 
 // przycisk headera pokazujący elementy Home
 function showHome() {
-
+    let options = getCategory.selectedOptions;
+    if (options[1].value === 'Home') {
+        console.log(options.value)
+    }
 }
 
 
@@ -205,35 +236,25 @@ function showPersonal() {
 
 }
 
-//generowanie karty to do a stronie głównej
+// function loadDataFromLocalStorageToEdit(noteId) {
 
-// przycisk ołówka do edycji danych
-function updateData(noteId) {
-    console.log('Aktualizacja notatki o id:', noteId);
-}
+//     const note = document.getElementById('note-' + noteId);
+//     let notes = getNotesFromLocalStorage();
 
+//     noteToEdit = notes.filter(note => note.id === noteId);
 
-//przycisk kosza do usuwania taska
+//     document.getElementById("input-field").value = noteToEdit.title;
+//     document.getElementById("category-field").value = noteToEdit.category;
+//     document.getElementById("text-field-input").value = noteToEdit.description;
 
-// zrobić usuwanie elementów nie po kluczu a po wartości 
-function deleteTask(noteId) {
-    console.log('Usuwanie notatki o id:', noteId);
-
-    let notes = getNotesFromLocalStorage();
-
-    notes = notes.filter(note => note.id !== noteId)
+// }
 
 
-    localStorage.removeItem(noteId);
-    // let i = localStorage.length;
-    // for (let i = localStorage.length; i >= 0; i--) {
-    //     let key = localStorage.key(i);
-    //     if (localStorage.getItem(key) === noteId) {
-    //         localStorage.removeItem(key);
-    //     } else
-    //         console.log("cos jest zle")
-    // }
-}
+
+
+
+
+
 
 //stare funkcje raczej do usunięcia jednak narazie sie wstrzymuje
 

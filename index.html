@@ -76,6 +76,42 @@
         <!-- W tym miejscu trzeba zrobic mapowanie z arrayu obiektow wszystkich notatek -->
         <div id="note-container">
         </div>
+        <dialog id="update-note-dialog">
+            <div class="dialogHeader">
+                <div class="update-header">Update</div>
+                <button id="update-close" class="material-symbols-outlined" onclick="closeDialogUpdate()">close</button>
+            </div>
+            <div id="update-note-form">
+                <div id="data-update-container">
+                    <div class="input-container">
+                        <span class="label-input">Update title...</span>
+                        <input type="text" id="input-field-update" value="" placeholder="e.g.Clean Home">
+                    </div>
+                    <div class="category-container">
+                        <span class="label-input">Update category</span>
+                        <select name="category-field-update" id="category-field-update">
+                            <option class="category-field-option" value="Select">--Select--</option>
+                            <option class="category-field-option" value="Home">Home</option>
+                            <option class="category-field-option" value="Work">Work</option>
+                            <option class="category-field-option" value="Personal">Personal</option>
+                        </select>
+                    </div>
+                    <div class="text-container">
+                        <div class="text-container-center">
+                            <span class="text-label-input">Update description...</span>
+                        </div>
+
+                        <textarea id="text-field-input-update" rows="5" cols="33"
+                            placeholder="e.g.It's time to clean my home"></textarea>
+                    </div>
+                </div>
+                <div class="submit-btn-container">
+                    <button id="submit-update-button" type="submit">Update</button>
+                    <button class="cancel" type="cancel" onclick="closeDialogUpdate();">Cancel</button>
+                </div>
+            </div>
+        </dialog>
+
     </div>
 
 

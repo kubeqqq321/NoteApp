@@ -11,7 +11,11 @@ var getTextDescription = document.getElementById('text-field-input');
 var checkboxNote = document.getElementById('checkbox-note');
 var categoryNote = document.getElementById('category-note'); // przyciski
 
-var addNewNote = document.getElementById("submit-add-button");
+var addNewNote = document.getElementById("submit-add-button"); //update dialog
+
+var dialogUpdateNote = document.getElementById('update-note-dialog');
+var closeUpdateNote = document.getElementById('update-close');
+var pencilUpdate = document.getElementById("pencil-edit");
 
 function selectCategory() {
   // const outputBox = document.getElementById('category-note');
@@ -31,7 +35,7 @@ function selectCategory() {
 }
 
 function createNewNote(note) {
-  return "\n    <div id=\"note-".concat(note.id, "\" class=\"note\" style=\"background-color: ").concat(note.color, " ;\">\n    <div class=\"header-note\">\n    <div class=\"checknox-title-note\">\n        <input id=\"checkbox-note\"  ").concat(note.isChecked ? 'checked' : '', " type=\"checkbox\" onclick=\"checkedDone(this,").concat(note.id, ")\"; >\n        <div id=\"title-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.title, "</div>\n    </div>\n    <div class=\"update-delete-note\">\n        <span id=\"pencil-edit\" class=\"material-symbols-outlined edit\"\n            onclick=\"updateData(").concat(note.id, ");\">edit</span>\n        <span id=\"bin-delete\" class=\"material-symbols-outlined delete\"\n            onclick=\"deleteTask(").concat(note.id, ");\">delete</span>\n    </div>\n    </div>\n    <div id=\"content-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.description, "</div>\n    <div id=\"category-date-container\">\n        <div id=\"creation-date\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.date, "</div>\n        <div id=\"category-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.category, "</div>\n    </div>\n    </div>");
+  return "\n    <div id=\"note-".concat(note.id, "\" class=\"note\" style=\"background-color: ").concat(note.color, " ;\">\n    <div class=\"header-note\">\n    <div class=\"checknox-title-note\">\n        <input id=\"checkbox-note\"  ").concat(note.isChecked ? 'checked' : '', " type=\"checkbox\" onclick=\"checkedDone(this,").concat(note.id, ")\"; >\n        <div id=\"title-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.title, "</div>\n    </div>\n    <div class=\"update-delete-note\">\n        <button id=\"pencil-edit\" class=\"material-symbols-outlined edit\"\n            onclick=\"updateData(").concat(note.id, ");\">edit</button>\n        <button id=\"bin-delete\" class=\"material-symbols-outlined delete\"\n            onclick=\"deleteTask(").concat(note.id, ");\">delete</button>\n    </div>\n    </div>\n    <div id=\"content-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.description, "</div>\n    <div id=\"category-date-container\">\n        <div id=\"creation-date\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.date, "</div>\n        <div id=\"category-note\" class=\"").concat(note.isChecked ? 'strikethrough' : '', "\" >").concat(note.category, "</div>\n    </div>\n    </div>");
 }
 
 function displayNotes() {
@@ -50,7 +54,7 @@ function getRandomColor() {
   var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
   if (randomColor.length != 7) {
-    randomColor = generateRandomColor();
+    randomColor = getRandomColor();
   }
 
   return randomColor;
@@ -71,7 +75,6 @@ function generateNote() {
     category: categoryNote,
     description: contentNote,
     isChecked: false,
-    //to jest do przemyślenia czy jest to do czegoś potrzebne
     date: creationNote,
     color: newColor
   };
@@ -92,8 +95,9 @@ function generateNote() {
 function resetValues() {
   getTitle.value = "";
   getTextDescription.value = ""; //nie wiem jak wyzerowac cały getCategory
+  // selectedIndex
 
-  getCategory[0];
+  getCategory.value;
 }
 
 addNewNote.addEventListener("click", function () {
@@ -124,20 +128,46 @@ function checkedDone(checkbox, noteId) {
     title.classList.add('strikethrough');
     category.classList.add('strikethrough');
     description.classList.add('strikethrough');
-    date.classList.add('strikethrough'); // checkboxNote.checked = true;
-
+    date.classList.add('strikethrough');
     findId.isChecked = true;
   } else {
     title.classList.remove('strikethrough');
     category.classList.remove('strikethrough');
     description.classList.remove('strikethrough');
-    date.classList.remove('strikethrough'); // checkboxNote.checked = false;
-
+    date.classList.remove('strikethrough');
     findId.isChecked = false;
   }
 
   console.log(note.id);
   dataSaveToLocalStorage(notes);
+} // przycisk ołówka do edycji danych
+
+
+function updateData(noteId) {
+  var notes = getNotesFromLocalStorage();
+  var noteToEdit = notes.find(function (note) {
+    return note.id === noteId;
+  });
+  document.getElementById("input-field-update").value = noteToEdit.title;
+  document.getElementById("category-field-update").value = noteToEdit.category;
+  document.getElementById("text-field-input-update").value = noteToEdit.description;
+  dialogUpdateNote.showModal();
+}
+
+function closeDialogUpdate() {
+  dialogUpdateNote.close();
+} //działa
+//przycisk kosza do usuwania taska 
+
+
+function deleteTask(noteId) {
+  console.log('Usuwanie notatki o id:', noteId);
+  var notes = getNotesFromLocalStorage();
+  notes = notes.filter(function (note) {
+    return note.id !== noteId;
+  });
+  dataSaveToLocalStorage(notes);
+  displayNotes();
 } // zapisywanie informacji do localStorage
 
 
@@ -152,44 +182,30 @@ function getNotesFromLocalStorage() {
 } // przycisk headera pokazujący elementy All
 
 
-function ShowAll() {
-  var options = getCategory.selectedOptions; // if (options[1].value === 'Home') {
-  //     console.log(options.value)
-  // }
-} // przycisk headera pokazujący elementy Home
+function ShowAll() {} // przycisk headera pokazujący elementy Home
 
 
-function showHome() {} // przycisk headera pokazujący elementy Work
+function showHome() {
+  var options = getCategory.selectedOptions;
+
+  if (options[1].value === 'Home') {
+    console.log(options.value);
+  }
+} // przycisk headera pokazujący elementy Work
 
 
 function showWork() {} // przycisk headera pokazujący elementy Personal
 
 
-function showPersonal() {} //generowanie karty to do a stronie głównej
-// przycisk ołówka do edycji danych
-
-
-function updateData(noteId) {
-  console.log('Aktualizacja notatki o id:', noteId);
-} //przycisk kosza do usuwania taska
-// zrobić usuwanie elementów nie po kluczu a po wartości 
-
-
-function deleteTask(noteId) {
-  console.log('Usuwanie notatki o id:', noteId);
-  var notes = getNotesFromLocalStorage();
-  notes = notes.filter(function (note) {
-    return note.id !== noteId;
-  });
-  localStorage.removeItem(noteId); // let i = localStorage.length;
-  // for (let i = localStorage.length; i >= 0; i--) {
-  //     let key = localStorage.key(i);
-  //     if (localStorage.getItem(key) === noteId) {
-  //         localStorage.removeItem(key);
-  //     } else
-  //         console.log("cos jest zle")
-  // }
-} //stare funkcje raczej do usunięcia jednak narazie sie wstrzymuje
+function showPersonal() {} // function loadDataFromLocalStorageToEdit(noteId) {
+//     const note = document.getElementById('note-' + noteId);
+//     let notes = getNotesFromLocalStorage();
+//     noteToEdit = notes.filter(note => note.id === noteId);
+//     document.getElementById("input-field").value = noteToEdit.title;
+//     document.getElementById("category-field").value = noteToEdit.category;
+//     document.getElementById("text-field-input").value = noteToEdit.description;
+// }
+//stare funkcje raczej do usunięcia jednak narazie sie wstrzymuje
 // function selectTitle() {
 //     const outputBox = document.getElementById('title-note');
 //     let title = getTitle.value;
